@@ -12,6 +12,8 @@ services:
         depends_on:
             db:
                 condition: service_healthy
+            redis:
+                condition: service_started
 
     db:
         container_name: db
@@ -28,8 +30,19 @@ services:
             interval: 2s
             timeout: 5s
             retries: 10
+        volumes:
+            - postgres_data:/data
+
+    redis:
+        container_name: redis
+        image: redis:7-alpine
+        restart: always
+        ports:
+            - "6379:6379"
+        command: redis-server --save 60 1 --loglevel warning
+        volumes:
+            - redis_data:/data
 
 volumes:
+    redis_data:
     postgres_data:
-    postgres_test_data:
-    pgadmin-data:
