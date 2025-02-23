@@ -1,14 +1,17 @@
 from src import Base
-from sqlalchemy import Table, Column, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-MetroMatch = Table(
-    'metro_match',
-    Base.metadata,
-    Column('line_id', Integer, ForeignKey('line.id')),
-    Column('station_id', Integer, ForeignKey('station.id'))
-)
+class MetroMatch(Base):
+    __tablename__ = "metro_match"
+
+    id = Column(Integer, primary_key=True)
+    id_line = Column(Integer, ForeignKey("line.id"))
+    id_station = Column(Integer, ForeignKey("station.id"))
+
+    line = relationship("Line", back_populates="metro_match")
+    station = relationship("Station", back_populates="metro_match")
 
 
 class Station(Base):
@@ -19,7 +22,7 @@ class Station(Base):
     lat = Column(Float)
     lng = Column(Float)
 
-    line = relationship("Line", secondary=MetroMatch, back_populates="station")
+    metro_match = relationship("MetroMatch", back_populates="station")
 
 
 class Line(Base):
@@ -29,4 +32,4 @@ class Line(Base):
     name = Column(String)
     color = Column(String)
 
-    station = relationship("Station", secondary=MetroMatch, back_populates="line")
+    metro_match = relationship("MetroMatch", back_populates="line")
