@@ -1,19 +1,22 @@
-from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean
+from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from src import Base
 import datetime
+
+from src import Base
+from src.user import User
 
 
 class Subscription(Base):
     __tablename__ = "subscription"
 
     id = Column(Integer, primary_key=True, index=True)
-    subscription = Column(Integer, nullable=False, ForeignKey("subscription_type.id"))
+    subscription = Column(Integer, ForeignKey("subscription_type.id"), nullable=False)
     duration = Column(Integer, nullable=False)
     start_date = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     status = Column(Boolean, nullable=False)
 
     subscription_type = relationship("SubscriptionType", back_populates="subscription")
+    user = relationship("User", back_populates="subscription")
 
 
 

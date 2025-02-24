@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
 
@@ -16,7 +16,7 @@ class User(Base):
     name = Column(String(12), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     last_login = Column(TIMESTAMP, nullable=False)
-    subscriptions = Column(Integer, nullable=True, ForeignKey("subscription.id"))
+    subscriptions = Column(Integer, ForeignKey("subscription.id"), nullable=False)
     balance = Column(Float, default=0.0, nullable=False)
 
     subscription = relationship("Subscription", back_populates="user")
