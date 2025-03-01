@@ -26,3 +26,12 @@ class Trade(Base):
     finished_at = Column(TIMESTAMP)
     expires_at = Column(TIMESTAMP)
     offer = Column(Integer, ForeignKey('offer.id'))
+
+class Item(Base):
+    __tablename__ = "item"
+
+    id = Column(Integer, primary_key = True, index = True)
+    title = Column(VARCHAR(255), nullable=False)
+    count = Column(Integer, nullable=False)
+    price = Column(Float, default=0.0)
+
