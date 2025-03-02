@@ -5,7 +5,7 @@ import datetime
 
 
 class Offer(Base):
-    tablename = "offer"
+    __tablename__ = "offer"
 
     id = Column(Integer, primary_key = True, index = True)
     title = Column(VARCHAR(16), nullable=False)
@@ -24,3 +24,13 @@ class Item(Base):
     count = Column(Integer, nullable=False)
     price = Column(Float, default=0.0)
 
+class Trade(Base):
+    __tablename__ = "trade"
+    id = Column(Integer, primary_key = True, index = True)
+    seller = Column(Integer, ForeignKey('user.username'))
+    buyer = Column(Integer, ForeignKey('user.username'))
+    status = Column(Boolean)
+    created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow)
+    finished_at = Column(TIMESTAMP)
+    expires_at = Column(TIMESTAMP)
+    offer = Column(Integer, ForeignKey('offer.id'))
