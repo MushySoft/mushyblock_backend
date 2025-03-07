@@ -18,6 +18,19 @@ class Item(Base):
     trade = relationship("Trade", back_populates="items")
 
 
+class Service(Base):
+    __tablename__ = "service"
+
+    id = Column(Integer, primary_key=True, index=True)
+    id_trade = Column(Integer, ForeignKey("trade.id"), nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255))
+    price = Column(Float, default=0.0, nullable=False)
+    photo = Column(String(255))
+
+    trade = relationship("Trade", back_populates="services")
+
+
 class Trade(Base):
     __tablename__ = "trade"
 
@@ -31,3 +44,4 @@ class Trade(Base):
     expires_at = Column(TIMESTAMP, nullable=False)
 
     items = relationship("Item", back_populates="trade")
+    services = relationship("Service", back_populates="trade")
