@@ -18,9 +18,9 @@ class Station(Base):
     __tablename__ = "station"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    lat = Column(Float)
-    lng = Column(Float)
+    name = Column(String(255), nullable=False)
+    lat = Column(Float, nullable=False)
+    lng = Column(Float, nullable=False)
 
     metro_match = relationship("MetroMatch", back_populates="station")
 
