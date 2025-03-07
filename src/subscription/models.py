@@ -15,7 +15,7 @@ class Subscription(Base):
     start_date = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     status = Column(Boolean, default=True, nullable=False)
 
-    subscription_type = relationship("SubscriptionType", back_populates="subscription")
+    subscription_type = relationship("SubscriptionType", back_populates="subscriptions")
     user = relationship("User", back_populates="subscription")
 
 
@@ -29,5 +29,5 @@ class SubscriptionType(Base):
     price = Column(Float, default=0.0, nullable=False)
     photo = Column(String(255))
 
-    subscription = relationship("Subscription", back_populates="subscription_type")
+    subscriptions = relationship("Subscription", back_populates="subscription_type")
     
