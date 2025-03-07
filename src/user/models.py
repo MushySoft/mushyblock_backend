@@ -16,8 +16,8 @@ class User(Base):
     name = Column(String(16), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     last_login = Column(TIMESTAMP, nullable=False)
-    id_subscription = Column(Integer, ForeignKey("subscription.id"), nullable=False)
+    id_subscription = Column(Integer, ForeignKey("subscription.id"), nullable=False, unique=True)
     balance = Column(Float, default=0.0, nullable=False)
     avatar = Column(String(255))
 
-    subscription = relationship("Subscription", back_populates="user")
+    subscription = relationship("Subscription", uselist=False, back_populates="user")
