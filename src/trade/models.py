@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 from src import Base
 import datetime
@@ -17,15 +17,17 @@ class Item(Base):
 
     trade = relationship("Trade", back_populates="items")
 
+
 class Trade(Base):
     __tablename__ = "trade"
 
-    id = Column(Integer, primary_key = True, index = True)
-    seller = Column(Integer, ForeignKey('user.username'))
-    buyer = Column(Integer, ForeignKey('user.username'))
-    status = Column(Boolean)
-    created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow)
+    id = Column(Integer, primary_key=True, index=True)
+    seller = Column(Integer, ForeignKey("user.id"), nullable=False)
+    buyer = Column(Integer, ForeignKey("user.id"))
+    description = Column(String(255))
+    status = Column(Enum("moderate", "active", "finished", name="status_enum"), nullable=False, default="moderate")
+    created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     finished_at = Column(TIMESTAMP)
-    expires_at = Column(TIMESTAMP)
+    expires_at = Column(TIMESTAMP, nullable=False)
 
     items = relationship("Item", back_populates="trade")
