@@ -1,4 +1,4 @@
-from sqlalchemy import Column, VARCHAR, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from src import Base
 import datetime
@@ -9,9 +9,11 @@ class Item(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     id_trade = Column(Integer, ForeignKey("trade.id"), nullable=False)
-    title = Column(VARCHAR(255), nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255))
     count = Column(Integer, nullable=False)
-    price = Column(Float, default=0.0)
+    price = Column(Float, default=0.0, nullable=False)
+    photo = Column(String(255))
 
     trade = relationship("Trade", back_populates="items")
 
