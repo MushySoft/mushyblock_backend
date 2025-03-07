@@ -29,7 +29,7 @@ class Line(Base):
     __tablename__ = "line"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    color = Column(String)
+    name = Column(String(255), nullable=False)
+    color = Column(String(255), nullable=False)
 
     metro_match = relationship("MetroMatch", back_populates="line")
