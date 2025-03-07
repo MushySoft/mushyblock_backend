@@ -10,10 +10,10 @@ class Subscription(Base):
     __tablename__ = "subscription"
 
     id = Column(Integer, primary_key=True, index=True)
-    subscription = Column(Integer, ForeignKey("subscription_type.id"), nullable=False)
+    id_subscription_type = Column(Integer, ForeignKey("subscription_type.id"), nullable=False)
     duration = Column(Integer, nullable=False)
     start_date = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
-    status = Column(Boolean, nullable=False)
+    status = Column(Boolean, default=True, nullable=False)
 
     subscription_type = relationship("SubscriptionType", back_populates="subscription")
     user = relationship("User", back_populates="subscription")
