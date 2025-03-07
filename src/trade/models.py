@@ -4,28 +4,20 @@ from src import Base
 import datetime
 
 
-class Offer(Base):
-    __tablename__ = "offer"
-
-    id = Column(Integer, primary_key = True, index = True)
-    title = Column(VARCHAR(16), nullable=False)
-    description = Column(VARCHAR(255))
-    item = Column(Integer)
-    owner = Column(Integer, ForeignKey('user.id'))
-
-    item1 = relationship("Item")
-    trade = relationship("Trade")
-
 class Item(Base):
     __tablename__ = "item"
 
     id = Column(Integer, primary_key=True, index=True)
+    id_trade = Column(Integer, ForeignKey("trade.id"), nullable=False)
     title = Column(VARCHAR(255), nullable=False)
     count = Column(Integer, nullable=False)
     price = Column(Float, default=0.0)
 
+    trade = relationship("Trade", back_populates="items")
+
 class Trade(Base):
     __tablename__ = "trade"
+
     id = Column(Integer, primary_key = True, index = True)
     seller = Column(Integer, ForeignKey('user.username'))
     buyer = Column(Integer, ForeignKey('user.username'))
@@ -33,4 +25,5 @@ class Trade(Base):
     created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow)
     finished_at = Column(TIMESTAMP)
     expires_at = Column(TIMESTAMP)
-    offer = Column(Integer, ForeignKey('offer.id'))
+
+    items = relationship("Item", back_populates="trade")
