@@ -24,9 +24,10 @@ class SubscriptionType(Base):
     __tablename__ = "subscription_type"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    price = Column(Float, nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255), nullable=False)
+    price = Column(Float, default=0.0, nullable=False)
+    photo = Column(String(255))
 
     subscription = relationship("Subscription", back_populates="subscription_type")
     
