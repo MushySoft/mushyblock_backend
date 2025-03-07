@@ -7,7 +7,7 @@ metro_match = Table(
     "metro_match",
     Base.metadata,
     Column("id_station", Integer, ForeignKey("station.id"), primary_key=True),
-    Column("id_line" Integer, ForeignKey("line.id"), primary_key=True),
+    Column("id_line", Integer, ForeignKey("line.id"), primary_key=True),
 )
 
 
