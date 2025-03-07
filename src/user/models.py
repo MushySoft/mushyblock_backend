@@ -21,3 +21,5 @@ class User(Base):
     avatar = Column(String(255))
 
     subscription = relationship("Subscription", uselist=False, back_populates="user")
+    seller_trades = relationship("Trade", foreign_keys="[Trade.seller]", back_populates="seller_user")
+    buyer_trades = relationship("Trade", foreign_keys="[Trade.buyer]", back_populates="buyer_user")

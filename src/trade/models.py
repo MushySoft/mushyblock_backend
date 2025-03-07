@@ -43,5 +43,7 @@ class Trade(Base):
     finished_at = Column(TIMESTAMP)
     expires_at = Column(TIMESTAMP, nullable=False)
 
+    seller_user = relationship("User", foreign_keys=[seller], back_populates="seller_trades")
+    buyer_user = relationship("User", foreign_keys=[buyer], back_populates="buyer_trades")    
     items = relationship("Item", back_populates="trade")
     services = relationship("Service", back_populates="trade")
