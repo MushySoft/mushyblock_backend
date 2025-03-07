@@ -14,7 +14,7 @@ metro_match = Table(
 class Station(Base):
     __tablename__ = "station"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)
     lat = Column(Float, nullable=False)
     lng = Column(Float, nullable=False)
@@ -25,7 +25,7 @@ class Station(Base):
 class Line(Base):
     __tablename__ = "line"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)
     color = Column(String(255), nullable=False)
 
