@@ -10,12 +10,12 @@ class Subscription(Base):
     __tablename__ = "subscription"
 
     id = Column(Integer, primary_key=True, index=True)
-    subscription = Column(Integer, ForeignKey("subscription_type.id"), nullable=False)
+    id_subscription_type = Column(Integer, ForeignKey("subscription_type.id"), nullable=False)
     duration = Column(Integer, nullable=False)
     start_date = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
-    status = Column(Boolean, nullable=False)
+    status = Column(Boolean, default=True, nullable=False)
 
-    subscription_type = relationship("SubscriptionType", back_populates="subscription")
+    subscription_type = relationship("SubscriptionType", back_populates="subscriptions")
     user = relationship("User", back_populates="subscription")
 
 
@@ -24,9 +24,10 @@ class SubscriptionType(Base):
     __tablename__ = "subscription_type"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    price = Column(Float, nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255), nullable=False)
+    price = Column(Float, default=0.0, nullable=False)
+    photo = Column(String(255))
 
-    subscription = relationship("Subscription", back_populates="subscription_type")
+    subscriptions = relationship("Subscription", back_populates="subscription_type")
     
