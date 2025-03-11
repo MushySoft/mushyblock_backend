@@ -8,6 +8,10 @@ from sqlalchemy.orm import sessionmaker
 
 from src import Base
 from src.user import User
+from src.metro import Station, Line, metro_match
+from src.subscription import Subscription, SubscriptionType
+from src.trade import Item, Service, Trade
+
 from src.config import load_config_from_redis
 
 target_metadata = Base.metadata
