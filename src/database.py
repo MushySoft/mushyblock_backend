@@ -14,14 +14,14 @@ async def get_db_url() -> str:
     return await get_database_url()
 
 
-async def create_engine(ASYNC_DATABASE_URL: str):
-    return create_async_engine(ASYNC_DATABASE_URL, echo=True)
+async def create_engine(DATABASE_URL: str):
+    return create_async_engine(DATABASE_URL, echo=True)
 
 
 async def get_db() -> AsyncSession:
-    ASYNC_DATABASE_URL = await get_database_url()
+    DATABASE_URL = await get_database_url()
 
-    engine = await create_engine(ASYNC_DATABASE_URL)
+    engine = await create_engine(DATABASE_URL)
 
     SessionLocal = async_sessionmaker(bind=engine, expire_on_commit=False)
 
