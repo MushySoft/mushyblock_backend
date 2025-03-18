@@ -5,9 +5,9 @@ from src.config import load_config_from_redis
 
 async def get_database_url() -> str:
     config = load_config_from_redis()
-    if not config or not config.ASYNC_DATABASE_URL:
+    if not config or not config.DATABASE_URL:
         raise ValueError("Database URL is not set. Ensure config is loaded.")
-    return config.ASYNC_DATABASE_URL
+    return config.DATABASE_URL
 
 
 async def get_db_url() -> str:

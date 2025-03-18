@@ -1,16 +1,14 @@
 from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
-from typing import TYPE_CHECKING
 
 from src import Base
-
-if TYPE_CHECKING:
-    from src.subscription import Subscription
+from src.subscription import Subscription
+from src.trade import Trade
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(16), unique=True, nullable=False)
@@ -23,6 +21,6 @@ class User(Base):
     balance = Column(Float, default=0.0, nullable=False)
     avatar = Column(String(255))
 
-    subscription = relationship("Subscription", uselist=False, back_populates="user")
+    subscription = relationship("Subscription", uselist=False, back_populates="users")
     seller_trades = relationship("Trade", foreign_keys="[Trade.seller]", back_populates="seller_user")
     buyer_trades = relationship("Trade", foreign_keys="[Trade.buyer]", back_populates="buyer_user")

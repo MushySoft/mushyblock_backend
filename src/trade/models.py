@@ -35,8 +35,8 @@ class Trade(Base):
     __tablename__ = "trade"
 
     id = Column(Integer, primary_key=True, index=True)
-    seller = Column(Integer, ForeignKey("user.id"), nullable=False)
-    buyer = Column(Integer, ForeignKey("user.id"))
+    seller = Column(Integer, ForeignKey("users.id"), nullable=False)
+    buyer = Column(Integer, ForeignKey("users.id"))
     description = Column(String(255))
     status = Column(Enum("moderate", "active", "finished", name="status_enum"), nullable=False, default="moderate")
     created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)

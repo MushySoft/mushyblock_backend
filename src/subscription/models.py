@@ -1,12 +1,9 @@
 from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 import datetime
-from typing import TYPE_CHECKING
 
 from src import Base
 
-if TYPE_CHECKING:
-    from src.user import User
 
 
 class Subscription(Base):
@@ -19,7 +16,7 @@ class Subscription(Base):
     status = Column(Boolean, default=True, nullable=False)
 
     subscription_type = relationship("SubscriptionType", back_populates="subscriptions")
-    user = relationship("User", back_populates="subscription")
+    users = relationship("User", back_populates="subscription")
 
 
 
