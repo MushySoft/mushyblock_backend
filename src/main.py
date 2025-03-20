@@ -1,8 +1,9 @@
 from fastapi import FastAPI
-from src import Base, get_db
 
 from src.auth import router as auth_router
 from src.user import router as user_router
+
+from src import Base, get_db
 
 app = FastAPI()
 

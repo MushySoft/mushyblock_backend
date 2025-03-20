@@ -5,7 +5,6 @@ import datetime
 from src import Base
 
 
-
 class Subscription(Base):
     __tablename__ = "subscription"
 

@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, Boolean, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from src import Base
 import datetime
+
+from src import Base
 
 
 class Item(Base):
