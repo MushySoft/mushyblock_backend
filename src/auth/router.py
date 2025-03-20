@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from src.auth.service import authenticate_user
-from src.auth.security import create_access_token
 import requests
 from datetime import timedelta
 
+from src.auth.service import authenticate_user
+from src.auth.security import create_access_token
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
