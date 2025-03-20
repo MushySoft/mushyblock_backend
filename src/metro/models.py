@@ -1,6 +1,7 @@
-from src import Base
 from sqlalchemy import Column, String, Float, Integer, ForeignKey, Table
 from sqlalchemy.orm import relationship
+
+from src import Base
 
 
 metro_match = Table(
