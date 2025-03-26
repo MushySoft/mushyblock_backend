@@ -21,3 +21,13 @@ class SubscriptionSchema(BaseModel):
 
 class SubscriptionsResponse(BaseModel):
     subscriptions: List[SubscriptionSchema]
+
+
+class SubscriptionPurchaseSchema(BaseModel):
+    id: int
+    subscription: SubscriptionTypeSchema
+    start_date: datetime
+    duration: int
+
+class SubscriptionPurchaseRequest(BaseModel):
+    subscription_id: int

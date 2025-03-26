@@ -3,7 +3,9 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from datetime import datetime
 
-from src.subscription.models import Subscription
+from src.user import models as user_models
+
+from src.subscription.models import SubscriptionType, Subscription
 
 
 async def get_available_subscriptions(db: AsyncSession):
@@ -33,4 +35,47 @@ async def get_available_subscriptions(db: AsyncSession):
             }
             for sub in subscriptions
         ]
+    }
+
+
+async def purchase_subscription(user_id: int, subscription_id: int, db: AsyncSession):
+    subscription_type = await db.execute(
+        select(SubscriptionType).where(SubscriptionType.id == subscription_id)
+    )
+    subscription_type = subscription_type.scalars().first()
+
+    if not subscription_type:
+        raise ValueError("Subscription type not found")
+
+    new_subscription = Subscription(
+        id_subscription_type = subscription_id,
+        duration = 30, #?
+        start_date = datetime.utcnow(),
+        status = True
+    )
+
+    user = await db.execute(select(user_models.User).where(user_models.User.id == user_id))
+    user = user.scalars().first()
+
+    if not user:
+        raise ValueError("User not found")
+
+    db.add(new_subscription)
+    await db.commit()
+    await db.refresh(new_subscription)
+
+    user.id_subscription = new_subscription.id
+    await db.commit()
+    await db.refresh(user)
+
+    return {
+        "id": new_subscription.id,
+        "subscription": {
+            "title": subscription_type.title,
+            "description": subscription_type.description,
+            "price": subscription_type.price,
+            "photo": subscription_type.photo,
+        },
+        "duration": new_subscription.duration,
+        "start_date": new_subscription.start_date,
     }
