@@ -1,5 +1,6 @@
-import requests
 from fastapi import HTTPException, status
+import requests
+
 from src.auth.security import verify_password
 
 USER_SERVICE_URL = "http://user-service/api/v1/users"
