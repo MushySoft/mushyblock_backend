@@ -23,7 +23,7 @@ class SubscriptionsResponse(BaseModel):
     subscriptions: List[SubscriptionSchema]
 
 
-class SubscriptionPurchaseSchema(BaseModel):
+class SubscriptionPurchaseResponse(BaseModel):
     id: int
     subscription: SubscriptionTypeSchema
     start_date: datetime
