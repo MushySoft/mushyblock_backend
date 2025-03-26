@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordBearer
 
 from src.database import get_db
 
-from src.subscription.schemas import SubscriptionsResponse, SubscriptionPurchaseSchema, SubscriptionPurchaseRequest
-from src.subscription.service import get_available_subscriptions, purchase_subscription
+from src.subscription.schemas import SubscriptionsResponse, SubscriptionPurchaseSchema, SubscriptionPurchaseRequest, ActiveSubscriptionsResponse
+from src.subscription.service import get_available_subscriptions, purchase_subscription, get_active_subscriptions
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -28,5 +28,16 @@ async def purchase_subscription_route(
     try:
         subscription = await purchase_subscription(fake_user_id, request.subscription_id, db)
         return subscription
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/active", response_model=ActiveSubscriptionsResponse)
+async def get_active_subscriptions_route(
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        active_subscriptions = await get_active_subscriptions(fake_user_id, db)
+        return {"active_subscriptions": active_subscriptions}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

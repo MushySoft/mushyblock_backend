@@ -29,5 +29,17 @@ class SubscriptionPurchaseSchema(BaseModel):
     start_date: datetime
     duration: int
 
+
 class SubscriptionPurchaseRequest(BaseModel):
     subscription_id: int
+
+
+class ActiveSubscriptionSchema(BaseModel):
+    subscription_id: int
+    subscription: SubscriptionTypeSchema
+    start_date: datetime
+    duration: int
+
+
+class ActiveSubscriptionsResponse(BaseModel):
+    active_subscriptions: List[ActiveSubscriptionSchema]

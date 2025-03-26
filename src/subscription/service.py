@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from datetime import datetime
 
 from src.user import models as user_models
@@ -79,3 +79,31 @@ async def purchase_subscription(user_id: int, subscription_id: int, db: AsyncSes
         "duration": new_subscription.duration,
         "start_date": new_subscription.start_date,
     }
+
+
+async def get_active_subscriptions(user_id: int, db: AsyncSession):
+    async with db.begin():
+        result = await db.execute(
+            select(Subscription)
+            .options(selectinload(Subscription.subscription_type))
+            .filter(Subscription.users.any(user_models.User.id == user_id), Subscription.status == True)
+        )
+        
+        subscriptions = result.scalars().all()
+        
+        active_subscriptions = [
+            {
+                "subscription_id": subscription.id,
+                "subscription": {
+                    "title": subscription.subscription_type.title,
+                    "description": subscription.subscription_type.description,
+                    "price": subscription.subscription_type.price,
+                    "photo": subscription.subscription_type.photo,
+                },
+                "duration": subscription.duration,
+                "start_date": subscription.start_date,
+            }
+            for subscription in subscriptions
+        ]
+        
+        return active_subscriptions
