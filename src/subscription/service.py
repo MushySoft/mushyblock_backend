@@ -64,11 +64,12 @@ async def purchase_subscription(user_id: int, subscription_id: int, duration: in
         raise ValueError("User not found")
 
     db.add(new_subscription)
-    await db.commit()
-    await db.refresh(new_subscription)
+    await db.flush()
 
     user.id_subscription = new_subscription.id
+
     await db.commit()
+    await db.refresh(new_subscription)
     await db.refresh(user)
 
     return {
@@ -85,36 +86,35 @@ async def purchase_subscription(user_id: int, subscription_id: int, duration: in
 
 
 async def get_active_subscription(user_id: int, db: AsyncSession):
-    async with db.begin():
-        user = await db.execute(select(user_models.User).where(user_models.User.id == user_id))
-        user = user.scalars().first()
+    user = await db.execute(select(user_models.User).where(user_models.User.id == user_id))
+    user = user.scalars().first()
 
-        if not user:
-            raise ValueError("User not found")
+    if not user:
+        raise ValueError("User not found")
 
-        if not user.id_subscription:
-            raise ValueError("User has no subscription")
+    if not user.id_subscription:
+        raise ValueError("User has no subscription")
 
-        result = await db.execute(
-            select(Subscription)
-            .options(selectinload(Subscription.subscription_type))
-            .filter(Subscription.id == user.id_subscription, Subscription.status == True)
-        )
-        
-        subscription = result.scalars().first()
-        
-        if not subscription:
-            raise ValueError("User has no active subscription")
+    result = await db.execute(
+        select(Subscription)
+        .options(selectinload(Subscription.subscription_type))
+        .filter(Subscription.id == user.id_subscription, Subscription.status == True)
+    )
+    
+    subscription = result.scalars().first()
+    
+    if not subscription:
+        raise ValueError("User has no active subscription")
 
-        return {
-            "id": subscription.id,
-            "subscription": {
-                "title": subscription.subscription_type.title,
-                "description": subscription.subscription_type.description,
-                "price": subscription.subscription_type.price,
-                "photo": subscription.subscription_type.photo,
-            },
-            "duration": subscription.duration,
-            "start_date": subscription.start_date,
-        }
+    return {
+        "id": subscription.id,
+        "subscription": {
+            "title": subscription.subscription_type.title,
+            "description": subscription.subscription_type.description,
+            "price": subscription.subscription_type.price,
+            "photo": subscription.subscription_type.photo,
+        },
+        "duration": subscription.duration,
+        "start_date": subscription.start_date,
+    }
  
