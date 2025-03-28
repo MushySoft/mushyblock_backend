@@ -31,7 +31,4 @@ async def purchase_subscription_route(
 async def get_active_subscriptions_route(
     db: AsyncSession = Depends(get_db)
 ):
-    try:
-        return await get_active_subscription(fake_user_id, db)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    return await get_active_subscription(fake_user_id, db)
