@@ -1,13 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import List
+from typing import Optional, List
 
 
 class SubscriptionTypeSchema(BaseModel):
-    title: str
-    description: str
-    price: float
-    photo: str | None
+    title: str = Field(max_length=255)
+    description: str = Field(max_length=255)
+    price: float = Field(default=0.0)
+    photo: Optional[str] = Field(None, max_length=255)
 
 
 class SubscriptionSchema(BaseModel):
@@ -15,7 +15,7 @@ class SubscriptionSchema(BaseModel):
     subscription: SubscriptionTypeSchema
     duration: int
     start_date: datetime
-    status: bool
+    status: bool = Field(default=True)
     owner: int
 
 
