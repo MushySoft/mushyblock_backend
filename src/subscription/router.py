@@ -16,8 +16,7 @@ fake_user_id = 1  # For example, a placeholder for a user with id = 1
 
 @router.get("/", response_model=SubscriptionsResponse)
 async def get_subscriptions(db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)):
-    subscriptions = await get_available_subscriptions(db)
-    return subscriptions
+    return await get_available_subscriptions(db)
 
 
 @router.post("/purchase", response_model=UserSubscriptionResponse)
