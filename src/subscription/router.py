@@ -22,9 +22,10 @@ async def get_subscriptions(db: AsyncSession = Depends(get_db), token: str = Dep
 @router.post("/purchase", response_model=UserSubscriptionResponse)
 async def purchase_subscription_route(
     request: SubscriptionPurchaseRequest,
+    duration: int,
     db: AsyncSession = Depends(get_db),
 ):
-    return await purchase_subscription(fake_user_id, request.subscription_id, db)
+    return await purchase_subscription(fake_user_id, request.subscription_id, duration, db)
 
 
 @router.get("/active", response_model=UserSubscriptionResponse)

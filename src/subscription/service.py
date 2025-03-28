@@ -38,7 +38,7 @@ async def get_available_subscriptions(db: AsyncSession):
     }
 
 
-async def purchase_subscription(user_id: int, subscription_id: int, db: AsyncSession):
+async def purchase_subscription(user_id: int, subscription_id: int, duration: int, db: AsyncSession):
     subscription_type = await db.execute(
         select(SubscriptionType).where(SubscriptionType.id == subscription_id)
     )
@@ -46,10 +46,13 @@ async def purchase_subscription(user_id: int, subscription_id: int, db: AsyncSes
 
     if not subscription_type:
         raise ValueError("Subscription type not found")
+    
+    if duration not in [7, 14, 30]:
+        raise ValueError("Invalid duration. Allowed values are 7, 14, or 30 days")
 
     new_subscription = Subscription(
         id_subscription_type = subscription_id,
-        duration = 30, #?
+        duration = duration,
         start_date = datetime.utcnow(),
         status = True
     )
