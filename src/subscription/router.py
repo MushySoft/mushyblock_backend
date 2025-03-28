@@ -25,11 +25,7 @@ async def purchase_subscription_route(
     request: SubscriptionPurchaseRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    try:
-        subscription = await purchase_subscription(fake_user_id, request.subscription_id, db)
-        return subscription
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    return await purchase_subscription(fake_user_id, request.subscription_id, db)
 
 
 @router.get("/active", response_model=ActiveSubscriptionsResponse)
