@@ -4,8 +4,8 @@ from fastapi.security import OAuth2PasswordBearer
 
 from src.database import get_db
 
-from src.subscription.schemas import SubscriptionsResponse, SubscriptionPurchaseResponse, SubscriptionPurchaseRequest, ActiveSubscriptionsResponse
-from src.subscription.service import get_available_subscriptions, purchase_subscription, get_active_subscriptions
+from src.subscription.schemas import SubscriptionsResponse, UserSubscriptionResponse, SubscriptionPurchaseRequest
+from src.subscription.service import get_available_subscriptions, purchase_subscription, get_active_subscription
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -20,7 +20,7 @@ async def get_subscriptions(db: AsyncSession = Depends(get_db), token: str = Dep
     return subscriptions
 
 
-@router.post("/purchase", response_model=SubscriptionPurchaseResponse)
+@router.post("/purchase", response_model=UserSubscriptionResponse)
 async def purchase_subscription_route(
     request: SubscriptionPurchaseRequest,
     db: AsyncSession = Depends(get_db),
@@ -28,12 +28,11 @@ async def purchase_subscription_route(
     return await purchase_subscription(fake_user_id, request.subscription_id, db)
 
 
-@router.get("/active", response_model=ActiveSubscriptionsResponse)
+@router.get("/active", response_model=UserSubscriptionResponse)
 async def get_active_subscriptions_route(
     db: AsyncSession = Depends(get_db)
 ):
     try:
-        active_subscriptions = await get_active_subscriptions(fake_user_id, db)
-        return {"active_subscriptions": active_subscriptions}
+        return await get_active_subscription(fake_user_id, db)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -81,29 +81,37 @@ async def purchase_subscription(user_id: int, subscription_id: int, db: AsyncSes
     }
 
 
-async def get_active_subscriptions(user_id: int, db: AsyncSession):
+async def get_active_subscription(user_id: int, db: AsyncSession):
     async with db.begin():
+        user = await db.execute(select(user_models.User).where(user_models.User.id == user_id))
+        user = user.scalars().first()
+
+        if not user:
+            raise ValueError("User not found")
+
+        if not user.id_subscription:
+            raise ValueError("User has no subscription")
+
         result = await db.execute(
             select(Subscription)
             .options(selectinload(Subscription.subscription_type))
-            .filter(Subscription.users.any(user_models.User.id == user_id), Subscription.status == True)
+            .filter(Subscription.id == user.id_subscription, Subscription.status == True)
         )
         
-        subscriptions = result.scalars().all()
+        subscription = result.scalars().first()
         
-        active_subscriptions = [
-            {
-                "subscription_id": subscription.id,
-                "subscription": {
-                    "title": subscription.subscription_type.title,
-                    "description": subscription.subscription_type.description,
-                    "price": subscription.subscription_type.price,
-                    "photo": subscription.subscription_type.photo,
-                },
-                "duration": subscription.duration,
-                "start_date": subscription.start_date,
-            }
-            for subscription in subscriptions
-        ]
-        
-        return active_subscriptions
+        if not subscription:
+            raise ValueError("User has no active subscription")
+
+        return {
+            "id": subscription.id,
+            "subscription": {
+                "title": subscription.subscription_type.title,
+                "description": subscription.subscription_type.description,
+                "price": subscription.subscription_type.price,
+                "photo": subscription.subscription_type.photo,
+            },
+            "duration": subscription.duration,
+            "start_date": subscription.start_date,
+        }
+ 
