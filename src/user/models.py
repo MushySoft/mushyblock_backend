@@ -17,7 +17,7 @@ class User(Base):
     name = Column(String(16), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.utcnow, nullable=False)
     last_login = Column(TIMESTAMP, nullable=False)
-    id_subscription = Column(Integer, ForeignKey("subscription.id", name="fk_user_subscription"), nullable=False, unique=True)
+    id_subscription = Column(Integer, ForeignKey("subscription.id", name="fk_user_subscription"), unique=True)
     balance = Column(Float, default=0.0, nullable=False)
     avatar = Column(String(255))
 

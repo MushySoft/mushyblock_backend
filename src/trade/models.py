@@ -9,7 +9,7 @@ class Item(Base):
     __tablename__ = "item"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_trade = Column(Integer, ForeignKey("trade.id"), nullable=False)
+    id_trade = Column(Integer, ForeignKey("trade.id"))
     title = Column(String(255), nullable=False)
     description = Column(String(255))
     count = Column(Integer, nullable=False)
@@ -23,7 +23,7 @@ class Service(Base):
     __tablename__ = "service"
 
     id = Column(Integer, primary_key=True, index=True)
-    id_trade = Column(Integer, ForeignKey("trade.id"), nullable=False)
+    id_trade = Column(Integer, ForeignKey("trade.id"))
     title = Column(String(255), nullable=False)
     description = Column(String(255))
     price = Column(Float, default=0.0, nullable=False)
