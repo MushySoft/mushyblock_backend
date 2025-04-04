@@ -8,7 +8,7 @@ from src import Base
 class Item(Base):
     __tablename__ = "item"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     id_trade = Column(Integer, ForeignKey("trade.id"))
     title = Column(String(255), nullable=False)
     description = Column(String(255))
@@ -22,7 +22,7 @@ class Item(Base):
 class Service(Base):
     __tablename__ = "service"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     id_trade = Column(Integer, ForeignKey("trade.id"))
     title = Column(String(255), nullable=False)
     description = Column(String(255))
@@ -35,7 +35,7 @@ class Service(Base):
 class Trade(Base):
     __tablename__ = "trade"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     seller = Column(Integer, ForeignKey("users.id"), nullable=False)
     buyer = Column(Integer, ForeignKey("users.id"))
     description = Column(String(255))
