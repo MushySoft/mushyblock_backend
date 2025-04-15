@@ -18,7 +18,6 @@ class Subscription(Base):
     users = relationship("User", back_populates="subscription")
 
 
-
 class SubscriptionType(Base):
     __tablename__ = "subscription_type"
 
@@ -29,4 +28,3 @@ class SubscriptionType(Base):
     photo = Column(String(255))
 
     subscriptions = relationship("Subscription", back_populates="subscription_type")
-    
