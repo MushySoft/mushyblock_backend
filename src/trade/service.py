@@ -1,14 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
-from fastapi.responses import JSONResponse
-
+from sqlalchemy import select
 
 from src.trade.schemas import OfferCreate, OfferType
 from src.trade.models import Item, Service
 
 
 async def create_offer_db(db: AsyncSession, offer_data: OfferCreate):
-
     if offer_data.type not in OfferType:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -50,3 +48,8 @@ async def create_offer_db(db: AsyncSession, offer_data: OfferCreate):
             "type": offer_data.type.value,
         }
 
+
+async def get_offer_db(db: AsyncSession):
+    result_service = await db.execute(select(Service))
+    result_item = await db.execute(select(Item))
+    return {"Services:": result_service.scalars().all(), "Items:": result_item.scalars().all()}
